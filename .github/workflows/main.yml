@@ -1,7 +1,12 @@
 name: CI
 on:
-  - push
-  - pull_request
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "7 4 * * 1" # every monday 04:07 UTC (during a low load time)
+
 jobs:
   test:
     name: Node.js ${{ matrix.node-version }}
@@ -17,5 +22,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: npm install
       - run: npm test
