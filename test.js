@@ -306,3 +306,10 @@ test.skip('Returns null on date before earliest date in dataset', async t => {
 
     t.assert(rate === null);
 });
+
+// TODO
+test.skip('Returns null on date that is not in dataset with defaultToNull', async t => {
+    const rate = await getExchangeRate('USD', new Date(2023, 0, 1), { defaultToNull: true });
+
+    t.assert(rate === null);
+});
