@@ -111,7 +111,7 @@ async function getRatesFromRba(slug) {
 function findClosestRate(rates, date, defaultToClosestPriorRate) {
     if (!rates) return null;
 
-    if (defaultToClosestPriorRate) rates = rates.toReversed();
+    if (defaultToClosestPriorRate) rates = rates.slice().reverse();
 
     for (let rate of rates) {
         if ((rate[DATE_KEY] < date && !defaultToClosestPriorRate) ||
