@@ -1,0 +1,44 @@
+{
+    "name": "exchange-rates-rba",
+    "version": "0.0.0",
+    "description": "Retrieve daily foreign exchange rates for USD, EUR, and more from the RBA.",
+    "license": "CC0-1.0",
+    "repository": "muhashi/exchange-rates-rba",
+    "author": {
+        "name": "muhashi",
+        "email": "muhamedoes+muhashi@gmail.com",
+        "url": "https://muhashi.com"
+    },
+    "type": "module",
+    "exports": "./index.js",
+    "sideEffects": false,
+    "engines": {
+        "node": ">=18"
+    },
+    "scripts": {
+        "test": "ava"
+    },
+    "files": [
+        "index.js"
+    ],
+    "keywords": [
+        "rba",
+        "exchange rates",
+        "aud/usd",
+        "usd/aud",
+        "australia exchange rates",
+        "forex",
+        "reserve bank of australia"
+    ],
+    "ava": {
+        "failFast": true
+    },
+    "dependencies": {
+        "node-fetch": "^3.3.2",
+        "xlsx": "^0.18.5"
+    },
+    "devDependencies": {
+        "ava": "^6.1.2",
+        "float-equal": "^3.0.0"
+    }
+}
