@@ -19,12 +19,12 @@ npm install exchange-rates-rba
 ## Usage
 
 ```js
-import getExchangeRate from 'exchange-rates-rba ';
+import getExchangeRate from 'exchange-rates-rba';
 
-getExchangeRate('USD', new Date(2023, 1, 22));
+await getExchangeRate('USD', new Date(2023, 1, 22));
 //=> 0.6789
 
-getExchangeRate('JPY', new Date(2017, 1, 1), { defaultToClosestPriorRate: true });
+await getExchangeRate('JPY', new Date(2017, 1, 1), { defaultToClosestPriorRate: true });
 //=> 128.12
 
 ```
@@ -32,6 +32,8 @@ getExchangeRate('JPY', new Date(2017, 1, 1), { defaultToClosestPriorRate: true }
 ## API
 
 ### getExchangeRate(currency, date, options?)
+
+Returns a Promise that resolves to the `currency`'s exchange rate with AUD. 
 
 #### currency
 
