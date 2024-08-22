@@ -2,13 +2,13 @@
 
 >  Get currency exchange rates from the Reserve Bank of Australia
 
-Retrieves exchange rates from the [Reserve Bank of Australia's exchange rate datasets](https://www.rba.gov.au/statistics/historical-data.html#exchange-rates).
+Retrieves exchange rates from the [Reserve Bank of Australia's exchange rate datasets](https://www.rba.gov.au/statistics/historical-data.html#exchange-rates). Base currency is always AUD.
 
 All datasets are cached after being downloaded for quick retrieval, and each dataset covers multiple years. Exchange rate data goes back to December 1983.
 
 If an exchange rate is not available on a given date, the closest exchange rate after the date will be provided. An option exists to provide the closest rate before the date.
 
-Some currencies are not available through the entire 1983 - current datasets, double check RBA data for the specified currency is available throughout the required period. USD is available for the entire 1983 - current dataset, excluding non-business days.
+Some currencies are not available through the entire 1983 – current datasets, double check RBA datasets for if the specified currency is available throughout the required period. USD is available for the entire dataset period, excluding non-business days.
 
 ## Install
 
