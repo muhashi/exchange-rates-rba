@@ -1,6 +1,6 @@
 {
     "name": "exchange-rates-rba",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Retrieve daily foreign exchange rates for USD, EUR, and more from the Reserve Bank of Australia.",
     "license": "CC0-1.0",
     "repository": "muhashi/exchange-rates-rba",
