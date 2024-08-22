@@ -1,7 +1,7 @@
 {
     "name": "exchange-rates-rba",
     "version": "1.0.2",
-    "description": "Retrieve daily foreign exchange rates for USD, EUR, and more from the RBA.",
+    "description": "Retrieve daily foreign exchange rates for USD, EUR, and more from the Reserve Bank of Australia.",
     "license": "CC0-1.0",
     "repository": "muhashi/exchange-rates-rba",
     "author": {
@@ -24,9 +24,13 @@
     "keywords": [
         "rba",
         "exchange rates",
-        "aud/usd",
-        "usd/aud",
-        "australia exchange rates",
+        "prices",
+        "usd",
+        "aud",
+        "jpy",
+        "australia",
+        "dataset",
+        "data",
         "forex",
         "reserve bank of australia"
     ],
