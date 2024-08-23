@@ -46,7 +46,7 @@ const currencyNameMap = {
 const DATE_KEY = 'Series ID';
 const cachedRates = {};
 
-export default async function getExchangeRate(currency, date, { defaultToClosestPriorRate = false } = {}) {
+export default async function getExchangeRate(currency, date, { defaultToClosestPriorRate = false, defaultToNull = false } = {}) {
     if (typeof currency !== 'string') {
         throw new TypeError(`Expected a string, got ${typeof currency}`);
     }
@@ -63,15 +63,19 @@ export default async function getExchangeRate(currency, date, { defaultToClosest
         return null;
     }
 
+    const getRate = (rateList) => defaultToNull
+        ? rateList.find(rate => rate[DATE_KEY].toDateString() === date.toDateString())
+        : findClosestRate(rateList, date, defaultToClosestPriorRate);
+
     const year = date.getFullYear();
     let rates = await getRatesForYear(year);
-    let rate = findClosestRate(rates, date, defaultToClosestPriorRate);
+    let rate = getRate(rates);
 
     if (!rate) {
         // could not find rate for given date - may be at end of the dataset (ie 31/12/2022), need to try next dataset
         const increment = defaultToClosestPriorRate ? -1 : 1;
         rates = await getRatesForYear(year + increment);
-        rate = findClosestRate(rates, date, defaultToClosestPriorRate);
+        rate = getRate(rates);
     }
 
     return rate ? rate[currencyNameMap[currency]] : null;
