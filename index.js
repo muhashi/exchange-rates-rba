@@ -16,6 +16,7 @@ const yearRanges = [
 ];
 
 const minYear = yearRanges.reduce((currMinYear, {range}) => Math.min(currMinYear, ...range), Infinity);
+const MAX_DAYS_BETWEEN = 7;
 
 const currencyNameMap = {
     USD: "FXRUSD",
@@ -46,7 +47,7 @@ const currencyNameMap = {
 const DATE_KEY = 'Series ID';
 const cachedRates = {};
 
-export default async function getExchangeRate(currency, date, { defaultToClosestPriorRate = false, defaultToNull = false } = {}) {
+export default async function getExchangeRate(currency, exchangeRateDate, { defaultToClosestPriorRate = false, defaultToNull = false } = {}) {
     if (typeof currency !== 'string') {
         throw new TypeError(`Expected a string, got ${typeof currency}`);
     }
@@ -55,9 +56,12 @@ export default async function getExchangeRate(currency, date, { defaultToClosest
         throw new TypeError(`Unexpected currency code, got ${currency}`);
     }
 
-    if (typeof date !== 'object') {
-        throw new TypeError(`Expected a date object, got ${typeof date}`);
+    if (typeof exchangeRateDate !== 'object') {
+        throw new TypeError(`Expected a date object, got ${typeof exchangeRateDate}`);
     }
+
+    const date = new Date(exchangeRateDate);
+    date.setHours(0, 0, 0, 0);
 
     if (date.getFullYear() < minYear) {
         return null;
@@ -65,17 +69,27 @@ export default async function getExchangeRate(currency, date, { defaultToClosest
 
     const getRate = (rateList) => defaultToNull
         ? rateList.find(rate => rate[DATE_KEY].toDateString() === date.toDateString())
-        : findClosestRate(rateList, date, defaultToClosestPriorRate);
+        : findClosestRate(rateList, date, currencyNameMap[currency], defaultToClosestPriorRate);
 
     const year = date.getFullYear();
     let rates = await getRatesForYear(year);
     let rate = getRate(rates);
+
+    const isBeforeMinDate = (rateList) => date.getFullYear() <= minYear && rateList && rateList[0] && date < rateList[0][DATE_KEY];
+
+    if (isBeforeMinDate(rates)) {
+        return null;
+    }
 
     if (!rate) {
         // could not find rate for given date - may be at end of the dataset (ie 31/12/2022), need to try next dataset
         const increment = defaultToClosestPriorRate ? -1 : 1;
         rates = await getRatesForYear(year + increment);
         rate = getRate(rates);
+
+        if (isBeforeMinDate(rates)) {
+            return null;
+        }
     }
 
     return rate ? rate[currencyNameMap[currency]] : null;
@@ -112,19 +126,36 @@ async function getRatesFromRba(slug) {
     return rates;
 }
 
-function findClosestRate(rates, date, defaultToClosestPriorRate) {
+function findClosestRate(rates, date, currency, defaultToClosestPriorRate) {
     if (!rates) return null;
 
     if (defaultToClosestPriorRate) rates = rates.slice().reverse();
 
     for (let rate of rates) {
         if ((rate[DATE_KEY] < date && !defaultToClosestPriorRate) ||
-            (rate[DATE_KEY] > date && defaultToClosestPriorRate)) {
+            (rate[DATE_KEY] > date && defaultToClosestPriorRate) ||
+            !rate[currency]) {
             continue;
         }
+
+        // Too many days between the target date and the found record's date - can't use
+        if (daysBetween(rate[DATE_KEY], date) > MAX_DAYS_BETWEEN) return null;
 
         return rate;
     }
 
     return null;
+}
+
+// https://stackoverflow.com/a/7763654
+function daysBetween(date1, date2) {
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+    const a = new Date(date1);
+    const b = new Date(date2);
+
+    // Set to noon - avoid DST errors
+    a.setHours(12, 0, 0, 0);
+    b.setHours(12, 0, 0, 0);
+
+    return Math.abs(Math.round((a - b) / MS_PER_DAY));
 }

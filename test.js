@@ -300,8 +300,7 @@ test.serial('Returns null on date before earliest date in dataset with defaultTo
     t.assert(rate === null);
 });
 
-// TODO
-test.skip('Returns null on date before earliest date in dataset', async t => {
+test.serial('Returns null on date before earliest date in dataset', async t => {
     const rate = await getExchangeRate('USD', new Date(1983, 11, 11));
 
     t.assert(rate === null);
@@ -311,4 +310,27 @@ test('Returns null on date that is not in dataset with defaultToNull', async t =
     const rate = await getExchangeRate('USD', new Date(2023, 0, 1), { defaultToNull: true });
 
     t.assert(rate === null);
+});
+
+test('Returns USD on date with different times', async t => {
+    const rateA = await getExchangeRate('USD', new Date(2023, 0, 6, 12, 32, 20, 101));
+    t.assert(floatEqual(rateA, 0.6769));
+
+    const rateB = await getExchangeRate('USD', new Date(2023, 0, 6, 23, 59, 59, 101));
+    t.assert(floatEqual(rateB, 0.6769));
+
+    const rateC = await getExchangeRate('USD', new Date(2023, 0, 6, 1, 9, 12, 12));
+    t.assert(floatEqual(rateC, 0.6769));
+});
+
+test('Returns null for CAD with greater than 7 day gap from next recorded date', async t => {
+    const rate = await getExchangeRate('CAD', new Date(2023, 11, 13));
+
+    t.assert(rate === null);
+});
+
+test('Returns CAD with 7 day gap from next recorded date', async t => {
+    const rate = await getExchangeRate('CAD', new Date(2023, 11, 14));
+
+    t.assert(floatEqual(rate, 0.9013));
 });
