@@ -294,13 +294,13 @@ test('Gets USD on date after last entry in dataset', async t => {
     t.assert(floatEqual(rate, 0.6828));
 });
 
-test.serial('Returns null on date before earliest date in dataset with defaultToClosestPriorRate', async t => {
+test.serial('Returns null on date before earliest date in all datasets with defaultToClosestPriorRate', async t => {
     const rate = await getExchangeRate('USD', new Date(1983, 11, 11), { defaultToClosestPriorRate: true });
 
     t.assert(rate === null);
 });
 
-test.serial('Returns null on date before earliest date in dataset', async t => {
+test.serial('Returns null on date before earliest date in all datasets', async t => {
     const rate = await getExchangeRate('USD', new Date(1983, 11, 11));
 
     t.assert(rate === null);
