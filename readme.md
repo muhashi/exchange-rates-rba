@@ -4,7 +4,7 @@
 
 Retrieves exchange rates from the [Reserve Bank of Australia's exchange rate datasets](https://www.rba.gov.au/statistics/historical-data.html#exchange-rates). Base currency is always AUD.
 
-All datasets are cached after being downloaded for quick retrieval, and each dataset covers multiple years. Exchange rate data goes back to December 1983. A maximum of 11 datasets will be downloaded, totalling about 6MB. 
+All datasets are cached after being downloaded for quick retrieval, and each dataset covers multiple years. Exchange rate data goes back to December 1983. A maximum of 11 datasets will be downloaded, totalling about 6MB. Datasets are only downloaded as needed, so you will likely only ever download one dataset (each dataset covers 3 - 4 years).
 
 Some currencies are not available through the entire 1983 – current datasets, double check RBA datasets for if the specified currency is available throughout the required period. USD is available for the entire dataset period, excluding non-business days.
 
