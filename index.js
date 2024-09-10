@@ -2,20 +2,20 @@ import fetch from 'node-fetch';
 import * as XLSX from 'xlsx/xlsx.mjs';
 
 const yearRanges = [
-    {range: [1983, 1986], slug: '1983-1986'},
-    {range: [1987, 1990], slug: '1987-1990'},
-    {range: [1991, 1994], slug: '1991-1994'},
-    {range: [1995, 1998], slug: '1995-1998'},
-    {range: [1999, 2002], slug: '1999-2002'},
-    {range: [2003, 2006], slug: '2003-2006'},
-    {range: [2007, 2009], slug: '2007-2009'},
-    {range: [2010, 2013], slug: '2010-2013'},
-    {range: [2014, 2017], slug: '2014-2017'},
-    {range: [2018, 2022], slug: '2018-2022'},
-    {range: [2023, 3000], slug: '2023-current'},
+    { range: [1983, 1986], slug: '1983-1986' },
+    { range: [1987, 1990], slug: '1987-1990' },
+    { range: [1991, 1994], slug: '1991-1994' },
+    { range: [1995, 1998], slug: '1995-1998' },
+    { range: [1999, 2002], slug: '1999-2002' },
+    { range: [2003, 2006], slug: '2003-2006' },
+    { range: [2007, 2009], slug: '2007-2009' },
+    { range: [2010, 2013], slug: '2010-2013' },
+    { range: [2014, 2017], slug: '2014-2017' },
+    { range: [2018, 2022], slug: '2018-2022' },
+    { range: [2023, 3000], slug: '2023-current' },
 ];
 
-const minYear = yearRanges.reduce((currMinYear, {range}) => Math.min(currMinYear, ...range), Infinity);
+const minYear = yearRanges.reduce((currMinYear, { range }) => Math.min(currMinYear, ...range), Infinity);
 const MAX_DAYS_BETWEEN = 7;
 
 const currencyNameMap = {
@@ -96,7 +96,7 @@ export default async function getExchangeRate(currency, exchangeRateDate, { defa
 }
 
 async function getRatesForYear(year) {
-    const { slug } = yearRanges.find(({range}) => range[0] <= year && year <= range[1]) ?? { slug: null };
+    const { slug } = yearRanges.find(({ range }) => range[0] <= year && year <= range[1]) ?? { slug: null };
 
     if (!slug) return null;
 
@@ -111,12 +111,12 @@ async function getRatesFromRba(slug) {
     const response = await fetch(`https://www.rba.gov.au/statistics/tables/xls-hist/${slug}.xls`);
     const body = await response.arrayBuffer();
 
-    const workbook = XLSX.read(body, {cellDates: true});
-    
+    const workbook = XLSX.read(body, { cellDates: true });
+
     // Assuming the data is in the first sheet
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-    
+
     // Convert the sheet to JSON
     const rates = XLSX.utils.sheet_to_json(sheet, { blankrows: false, range: 10 });
 

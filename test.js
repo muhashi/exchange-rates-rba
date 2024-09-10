@@ -1,7 +1,7 @@
 import test from 'ava';
 import getExchangeRate from './index.js';
 import floatEqual from 'float-equal';
-import {setTimeout} from 'node:timers/promises';
+import { setTimeout } from 'node:timers/promises';
 
 
 test('Throws when number in currency input', async t => {
