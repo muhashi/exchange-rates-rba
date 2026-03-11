@@ -15,9 +15,9 @@ jobs:
       fail-fast: true
       matrix:
         node-version:
+          - 24
           - 22
           - 20
-          - 18
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
